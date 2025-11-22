@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Tech Connect - Event Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #f4f5fb;
+            padding: 30px 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #ffffff;
+            padding: 25px 30px 30px;
+            border-radius: 14px;
+            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+            color: #222;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .required {
+            color: #e53935;
+            margin-left: 3px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            padding: 9px 10px;
+            border-radius: 8px;
+            border: 1px solid #d0d0dd;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            border-color: #4a6cff;
+            box-shadow: 0 0 0 3px rgba(74, 108, 255, 0.18);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 4px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            margin-top: 18px;
+            padding: 11px 22px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #4a6cff, #6a4bff);
+            color: white;
+            box-shadow: 0 8px 20px rgba(76, 102, 255, 0.4);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(76, 102, 255, 0.45);
+            opacity: 0.96;
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 16px rgba(76, 102, 255, 0.35);
+        }
+
+        .error {
+            font-size: 12px;
+            color: #e53935;
+            margin-top: 3px;
+            min-height: 14px;
+        }
+
+        .success-message {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #1b8a32;
+        }
+
+        .divider {
+            margin: 25px 0 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .analytics-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        #toggleAnalyticsBtn {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 999px;
+            border: 1px solid #4a6cff;
+            background: #f3f4ff;
+            color: #283593;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        #toggleAnalyticsBtn:hover {
+            background: #4a6cff;
+            color: #ffffff;
+        }
+
+        #analyticsPanel {
+            margin-top: 15px;
+            padding: 15px 18px;
+            border-radius: 12px;
+            background: #f7f7ff;
+            border: 1px solid #dee0ff;
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 12px 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(90, 98, 255, 0.05);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #3f51b5;
+        }
+
+        .stat-sub {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 18px 14px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Global Tech Connect - Event Registration</h1>
+        <p>Register for our upcoming workshop and get instant insights into attendee statistics.</p>
+    </div>
+
+    <!-- Registration Form -->
+    <form id="registrationForm" novalidate>
+        <div class="form-grid">
+            <!-- Full Name -->
+            <div class="form-group full-width">
+                <label for="fullName">Full Name <span class="required">*</span></label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
+                <div class="error" id="nameError"></div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group full-width">
+                <label for="email">Professional Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="example@company.com">
+                <div class="error" id="emailError"></div>
+            </div>
+
+            <!-- Company / Institution -->
+            <div class="form-group full-width">
+                <label for="company">Company / Institution (Optional)</label>
+                <input type="text" id="company" name="company" placeholder="Your company or institution">
+                <div class="error" id="companyError"></div>
+            </div>
+
+            <!-- Attendance Type -->
+            <div class="form-group full-width">
+                <label>Attendance Type <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="attendance" value="Virtual"> Virtual
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="attendance" value="In-Person"> In-Person
+                    </label>
+                </div>
+                <div class="error" id="attendanceError"></div>
+            </div>
+        </div>
+
+        <button type="submit">Register for Event</button>
+        <div class="success-message" id="successMessage"></div>
+    </form>
+
+    <div class="divider"></div>
+
+    <!-- Analytics Section -->
+    <div class="analytics-header">
+        <h2 style="font-size: 18px; color:#222;">Event Analytics</h2>
+        <button id="toggleAnalyticsBtn" type="button">Show Event Analytics</button>
+    </div>
+
+    <div id="analyticsPanel">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Registrants</div>
+                <div class="stat-value" id="totalRegistrants">0</div>
+                <div class="stat-sub">All attendees</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Virtual</div>
+                <div class="stat-value" id="virtualCount">0</div>
+                <div class="stat-sub">Joined online</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">In-Person</div>
+                <div class="stat-value" id="inPersonCount">0</div>
+                <div class="stat-sub">On-site attendees</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const registrations = [];
+
+    const form = document.getElementById('registrationForm');
+    const fullNameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('email');
+    const companyInput = document.getElementById('company');
+
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const companyError = document.getElementById('companyError');
+    const attendanceError = document.getElementById('attendanceError');
+    const successMessage = document.getElementById('successMessage');
+
+    const toggleAnalyticsBtn = document.getElementById('toggleAnalyticsBtn');
+    const analyticsPanel = document.getElementById('analyticsPanel');
+    const totalRegistrantsEl = document.getElementById('totalRegistrants');
+    const virtualCountEl = document.getElementById('virtualCount');
+    const inPersonCountEl = document.getElementById('inPersonCount');
+
+    function validateName() {
+        const name = fullNameInput.value.trim();
+        if (name.length < 6 || name.length > 100) {
+            nameError.textContent = "Name must be between 6 and 100 characters.";
+            return false;
+        }
+        nameError.textContent = "";
+        return true;
+    }
+
+    function validateEmail() {
+        const email = emailInput.value.trim();
+        // Simple email format check
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            emailError.textContent = "Please enter a valid professional email address.";
+            return false;
+        }
+        emailError.textContent = "";
+        return true;
+    }
+
+    function validateCompany() {
+        const company = companyInput.value.trim();
+        if (company.length > 100) {
+            companyError.textContent = "Company/Institution name must not exceed 100 characters.";
+            return false;
+        }
+        companyError.textContent = "";
+        return true;
+    }
+
+    function validateAttendance() {
+        const selected = document.querySelector('input[name="attendance"]:checked');
+        if (!selected) {
+            attendanceError.textContent = "Please select your attendance type.";
+            return false;
+        }
+        attendanceError.textContent = "";
+        return true;
+    }
+    fullNameInput.addEventListener('input', validateName);
+    emailInput.addEventListener('input', validateEmail);
+    companyInput.addEventListener('input', validateCompany);
+
+    document.querySelectorAll('input[name="attendance"]').forEach(radio => {
+        radio.addEventListener('change', validateAttendance);
+    });
+    function updateAnalytics() {
+        const total = registrations.length;
+        const virtual = registrations.filter(r => r.attendance === 'Virtual').length;
+        const inPerson = registrations.filter(r => r.attendance === 'In-Person').length;
+
+        totalRegistrantsEl.textContent = total;
+        virtualCountEl.textContent = virtual;
+        inPersonCountEl.textContent = inPerson;
+    }
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // prevent page reload
+
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        const isCompanyValid = validateCompany();
+        const isAttendanceValid = validateAttendance();
+
+        if (!isNameValid || !isEmailValid || !isCompanyValid || !isAttendanceValid) {
+            successMessage.textContent = "";
+            return;
+        }
+
+        const selectedAttendance = document.querySelector('input[name="attendance"]:checked').value;
+
+        registrations.push({
+            name: fullNameInput.value.trim(),
+            email: emailInput.value.trim(),
+            company: companyInput.value.trim(),
+            attendance: selectedAttendance
+        });
+
+        fullNameInput.value = "";
+        emailInput.value = "";
+        companyInput.value = "";
+        document.querySelectorAll('input[name="attendance"]').forEach(r => r.checked = false);
+        attendanceError.textContent = "";
+
+        successMessage.textContent = "Registration successful!";
+        if (analyticsPanel.style.display === 'block') {
+            updateAnalytics();
+        }
+    });
+    toggleAnalyticsBtn.addEventListener('click', function () {
+        if (analyticsPanel.style.display === 'none' || analyticsPanel.style.display === '') {
+            // show analytics
+            updateAnalytics();
+            analyticsPanel.style.display = 'block';
+            toggleAnalyticsBtn.textContent = 'Hide Event Analytics';
+        } else {
+            // hide analytics
+            analyticsPanel.style.display = 'none';
+            toggleAnalyticsBtn.textContent = 'Show Event Analytics';
+        }
+    });
+</script>
+
+</body>
+</html>
